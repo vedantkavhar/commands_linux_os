@@ -74,4 +74,102 @@ cd java-docker-app
 
 nano Hello.java
 
+nano Dockerfile
 
+/////////////////////
+FROM eclipse-temurin:17-jdk
+
+WORKDIR /app
+
+COPY Hello.java .
+
+RUN javac Hello.java
+
+CMD ["java", "Hello"]
+///////////////////////
+docker build -t java-demo .
+docker images
+docker run java-demo
+
+
+
+
+
+=====================================================
+4. Docker Compose
+Create:
+One Java container
+One MySQL container
+Run both containers using Docker Compose.
+
+
+
+mkdir compose-demo
+cd compose-demo
+
+nano Hello.java
+
+nano Dockerfile
+
+FROM eclipse-temurin:17-jdk
+
+WORKDIR /app
+
+COPY Hello.java .
+
+RUN javac Hello.java
+
+CMD ["java", "Hello"]
+
+nano docker-compose.yml
+
+services:
+  java-app:
+    build: .
+    container_name: java-container
+
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: cdacdb
+    ports:
+      - "3306:3306"
+
+
+
+docker compose up
+docker ps
+
+docker network ls
+docker exec -it mysql-container bash
+
+mysql -u root -p               //root123
+
+docker compose down
+
+
+======================================
+7. Docker Hub
+Create Docker Hub repository.
+Tag Docker image.
+Push image to Docker Hub.
+Pull image and run container again.
+
+docker login
+
+docker tag java-demo vedantk123/java-demo:latest       //same image 2 name
+
+docker push vedantk19/java-ved-demo                   //put to dhub
+
+docker images
+
+docker rm <container-id>
+
+docker rmi vedantk123/java-demo:latest            //remove local image
+
+docker pull vedantk123/java-demo:latest              //fetch from dhub
+
+
+ docker run vedantk19/java-ved-demo:latest
